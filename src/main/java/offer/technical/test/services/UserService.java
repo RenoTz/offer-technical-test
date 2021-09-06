@@ -12,11 +12,11 @@ public class UserService {
   @Autowired
   private UserRepository repository;
 
-  public List<User> getAllUsers() {
+  public List<User> getAll() {
     return repository.findAll();
   }
 
-  public User createUser(final User user) {
+  public User create(final User user) {
     return repository.create(user);
   }
 

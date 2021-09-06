@@ -21,12 +21,12 @@ public class UserController {
 
   @GetMapping
   public ResponseEntity<List<User>> getAll() {
-    return ResponseEntity.ok(this.userService.getAllUsers());
+    return ResponseEntity.ok(this.userService.getAll());
   }
 
   @PostMapping
   public ResponseEntity<User> create(@RequestBody @Validated final User user) {
-    return ResponseEntity.ok(this.userService.createUser(user));
+    return ResponseEntity.ok(this.userService.create(user));
   }
 
 }
