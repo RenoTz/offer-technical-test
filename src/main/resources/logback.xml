@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <globalCustomFields>
+          <customFields>
+            {"application":"offer-technical-test","platform":"${PLATFORM}",
+            "namespace":"${PERIMETER}", "type": "app"}
+          </customFields>
+        </globalCustomFields>
+        <logLevel/>
+        <timestamp>
+          <fieldName>time</fieldName>
+          <timeZone>UTC</timeZone>
+        </timestamp>
+        <message/>
+        <nestedField>
+          <fieldName>meta</fieldName>
+          <providers>
+            <loggerName>
+              <fieldName>logger</fieldName>
+            </loggerName>
+            <mdc>
+              <includeMdcKeyName>method</includeMdcKeyName>
+              <includeMdcKeyName>referer</includeMdcKeyName>
+              <includeMdcKeyName>request_id</includeMdcKeyName>
+              <includeMdcKeyName>component</includeMdcKeyName>
+              <includeMdcKeyName>correlation_id</includeMdcKeyName>
+              <includeMdcKeyName>path</includeMdcKeyName>
+            </mdc>
+            <pattern>
+              <omitEmptyFields>true</omitEmptyFields>
+              <pattern>
+                {"status":"#asLong{%replace(%replace(%level){'(INFO|WARN|DEBUG|TRACE)','1'}){'(ERROR|FATAL)','0')}}"}
+              </pattern>
+            </pattern>
+            <stackTrace>
+              <fieldName>exception</fieldName>
+              <throwableConverter
+                class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                <rootCauseFirst>true</rootCauseFirst>
+              </throwableConverter>
+            </stackTrace>
+          </providers>
+        </nestedField>
+      </providers>
+    </encoder>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>
