@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/RenoTz/offer-technical-test.svg?branch=master)](https://app.travis-ci.com/RenoTz/offer-technical-test)
+
 # Introduction 
 This is an offer technical test.
 
