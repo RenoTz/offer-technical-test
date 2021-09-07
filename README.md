@@ -4,6 +4,12 @@ This is an offer technical test.
 An integrated MongoDB database is included in this project. 
 This will allow us to easily manipulate the data without any impact.
 
+# Requirements
+
+- Maven 3.6.0
+- An IDE : IntelliJ or Eclipse
+- Postman
+
 # Build and Test
 Build this project with command below : mvn clean compile
 
