@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import offer.technical.test.helper.ExpectedTestViolation;
 import offer.technical.test.helper.TestValidationHelper;
-import offer.technical.test.model.User;
+import offer.technical.test.model.UserResource;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +25,18 @@ class GenderConstraintValidatorTest {
   void testWithValidValues(final String gender) {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.emptyList();
 
-    final User user = getMinimalUser()
+    final UserResource user = getMinimalUser()
         .setGender(gender);
 
-    final Set<ConstraintViolation<User>> validate = testValidationHelper
+    final Set<ConstraintViolation<UserResource>> validate = testValidationHelper
         .getValidator()
         .validate(user);
 
     testValidationHelper.containsExactlyExpectedViolations(validate, expectedTestViolations);
   }
 
-  private User getMinimalUser() {
-    return new User()
+  private UserResource getMinimalUser() {
+    return new UserResource()
         .setName("name")
         .setCountry("france")
         .setBirthDate(LocalDate.of(2000, 1, 1));
@@ -49,10 +49,10 @@ class GenderConstraintValidatorTest {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.singletonList(
         new ExpectedTestViolation("gender", "must be a male or female"));
 
-    final User user = getMinimalUser()
+    final UserResource user = getMinimalUser()
         .setGender(gender);
 
-    final Set<ConstraintViolation<User>> validate = testValidationHelper
+    final Set<ConstraintViolation<UserResource>> validate = testValidationHelper
         .getValidator()
         .validate(user);
 

@@ -1,7 +1,7 @@
 package offer.technical.test.controller;
 
 import java.util.List;
-import offer.technical.test.model.User;
+import offer.technical.test.model.UserResource;
 import offer.technical.test.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +20,12 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
-  public ResponseEntity<List<User>> getAll() {
+  public ResponseEntity<List<UserResource>> getAll() {
     return ResponseEntity.ok(this.userService.getAll());
   }
 
   @PostMapping
-  public ResponseEntity<User> create(@RequestBody @Validated final User user) {
+  public ResponseEntity<UserResource> create(@RequestBody @Validated final UserResource user) {
     return ResponseEntity.ok(this.userService.create(user));
   }
 

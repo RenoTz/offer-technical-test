@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import offer.technical.test.helper.ExpectedTestViolation;
 import offer.technical.test.helper.TestValidationHelper;
-import offer.technical.test.model.User;
+import offer.technical.test.model.UserResource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,12 +23,12 @@ class AdultConstraintValidatorTest {
   void testWithValidValue() {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.emptyList();
 
-    final User user = new User()
+    final UserResource user = new UserResource()
         .setName("name")
         .setCountry("france")
         .setBirthDate(LocalDate.of(2000, 1, 1));
 
-    final Set<ConstraintViolation<User>> validate = testValidationHelper
+    final Set<ConstraintViolation<UserResource>> validate = testValidationHelper
         .getValidator()
         .validate(user);
 
@@ -40,12 +40,12 @@ class AdultConstraintValidatorTest {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.singletonList(
         new ExpectedTestViolation("birthDate", "must be an adult"));
 
-    final User user = new User()
+    final UserResource user = new UserResource()
         .setName("name")
         .setCountry("france")
         .setBirthDate(LocalDate.of(2015, 1, 1));
 
-    final Set<ConstraintViolation<User>> validate = testValidationHelper
+    final Set<ConstraintViolation<UserResource>> validate = testValidationHelper
         .getValidator()
         .validate(user);
 

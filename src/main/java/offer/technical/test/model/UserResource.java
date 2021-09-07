@@ -8,11 +8,9 @@ import offer.technical.test.model.validation.AdultConstraint;
 import offer.technical.test.model.validation.CountryConstraint;
 import offer.technical.test.model.validation.GenderConstraint;
 import offer.technical.test.model.validation.PhoneNumberConstraint;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "users")
-public class User {
+public class UserResource {
 
   @NotBlank
   private String name;

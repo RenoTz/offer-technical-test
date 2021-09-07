@@ -5,7 +5,7 @@ An integrated MongoDB database is included in this project.
 This will allow us to easily manipulate the data without any impact.
 
 # Build and Test
-You can build this project with command below : mvn clean compile
+Build this project with command below : mvn clean compile
 
 Then, launch Application.
 

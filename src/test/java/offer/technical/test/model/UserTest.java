@@ -24,8 +24,8 @@ class UserTest {
         new ExpectedTestViolation("birthDate", TestValidationHelper.NOT_NULL_MESSAGE),
         new ExpectedTestViolation("country", TestValidationHelper.NOT_BLANK_MESSAGE));
 
-    final User user = new User();
-    final Set<ConstraintViolation<User>> result = testValidationHelper.getValidator()
+    final UserResource user = new UserResource();
+    final Set<ConstraintViolation<UserResource>> result = testValidationHelper.getValidator()
         .validate(user);
 
     testValidationHelper.containsExactlyExpectedViolations(result, expectedViolations);

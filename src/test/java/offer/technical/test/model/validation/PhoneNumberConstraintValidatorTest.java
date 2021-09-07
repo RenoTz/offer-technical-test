@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import offer.technical.test.helper.ExpectedTestViolation;
 import offer.technical.test.helper.TestValidationHelper;
-import offer.technical.test.model.User;
+import offer.technical.test.model.UserResource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -37,18 +37,18 @@ class PhoneNumberConstraintValidatorTest {
   void testWithValidValue(final String phoneNumber) {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.emptyList();
 
-    final User user = getMinimalUser()
+    final UserResource user = getMinimalUser()
         .setPhoneNumber(phoneNumber);
 
-    final Set<ConstraintViolation<User>> validate = testValidationHelper
+    final Set<ConstraintViolation<UserResource>> validate = testValidationHelper
         .getValidator()
         .validate(user);
 
     testValidationHelper.containsExactlyExpectedViolations(validate, expectedTestViolations);
   }
 
-  private User getMinimalUser() {
-    return new User()
+  private UserResource getMinimalUser() {
+    return new UserResource()
         .setName("name")
         .setCountry("france")
         .setBirthDate(LocalDate.of(2000, 1, 1));
@@ -59,10 +59,10 @@ class PhoneNumberConstraintValidatorTest {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.singletonList(
         new ExpectedTestViolation("phoneNumber", "must be a valid phone number"));
 
-    final User user = getMinimalUser()
+    final UserResource user = getMinimalUser()
         .setPhoneNumber("0123456874 5412 54");
 
-    final Set<ConstraintViolation<User>> validate = testValidationHelper
+    final Set<ConstraintViolation<UserResource>> validate = testValidationHelper
         .getValidator()
         .validate(user);
 
