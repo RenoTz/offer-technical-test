@@ -57,7 +57,7 @@ class PhoneNumberConstraintValidatorTest {
   @Test
   void testWithInvalidValue() {
     final List<ExpectedTestViolation> expectedTestViolations = Collections.singletonList(
-        new ExpectedTestViolation("phoneNumber", "must be a valid phone number"));
+        new ExpectedTestViolation("phoneNumber", "must have a valid phone number"));
 
     final UserResource user = getMinimalUser()
         .setPhoneNumber("0123456874 5412 54");

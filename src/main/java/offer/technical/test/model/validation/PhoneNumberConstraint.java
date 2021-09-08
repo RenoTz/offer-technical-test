@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = PhoneNumberValidator.class)
 public @interface PhoneNumberConstraint {
 
-  String message() default "must be a valid phone number";
+  String message() default "must have a valid phone number";
 
   Class<?>[] groups() default {};
 
