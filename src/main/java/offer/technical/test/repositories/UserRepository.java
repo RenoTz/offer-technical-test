@@ -1,5 +1,6 @@
 package offer.technical.test.repositories;
 
+import java.util.Objects;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import offer.technical.test.model.UserEntity;
@@ -30,10 +31,12 @@ public class UserRepository {
     query.addCriteria(Criteria.where("name").is(name));
     log.info("Attempting to find user with username : {}", name);
     final UserEntity userEntity = mongoTemplate.findOne(query, UserEntity.class);
-    Optional.ofNullable(userEntity)
-        .ifPresent(user -> log
-            .info("User found : {} - {} - {}", user.getName(), user.getBirthDate(),
-                user.getCountry()));
+    if (Objects.nonNull(userEntity)) {
+      log.info("User found : {} - {} - {}", userEntity.getName(), userEntity.getBirthDate(),
+          userEntity.getCountry());
+    } else {
+      log.info("No user found with the username : {}", name);
+    }
     return userEntity;
   }
 

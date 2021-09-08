@@ -1,5 +1,6 @@
 package offer.technical.test.controller;
 
+import java.util.Optional;
 import offer.technical.test.model.UserResource;
 import offer.technical.test.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,9 @@ public class UserController {
    */
   @GetMapping
   public ResponseEntity<UserResource> getUser(@RequestParam final String name) {
-    return ResponseEntity.ok(this.userService.getUser(name));
+    return Optional.ofNullable(this.userService.getUser(name))
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
   }
 
   /**

@@ -38,7 +38,7 @@ class UserControllerTest {
   private WebTestClient webClient;
 
   @Test
-  void getUser() {
+  void getUser_found() {
 
     final UserResource user = getMinimalUser();
     final UserEntity userEntity = getMinimalUserEntity();
@@ -59,6 +59,26 @@ class UserControllerTest {
 
     verify(userRepository, only()).findOneByName(userEntity.getName());
     verify(userRepository, times(1)).findOneByName(userEntity.getName());
+  }
+
+  @Test
+  void getUser_notFound() {
+
+    when(userRepository.findOneByName("test")).thenReturn(null);
+
+    final String uriWithQueryParam = UriComponentsBuilder.fromUriString(TARGET_URI)
+        .queryParam("name", "test")
+        .toUriString();
+
+    webClient.get()
+        .uri(uriWithQueryParam)
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .isNotFound();
+
+    verify(userRepository, only()).findOneByName("test");
+    verify(userRepository, times(1)).findOneByName("test");
   }
 
   @Test
