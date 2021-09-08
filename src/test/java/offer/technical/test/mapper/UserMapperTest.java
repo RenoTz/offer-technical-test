@@ -1,8 +1,6 @@
 package offer.technical.test.mapper;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
 import offer.technical.test.model.UserEntity;
 import offer.technical.test.model.UserResource;
 import org.assertj.core.api.Assertions;
