@@ -1,15 +1,12 @@
 package offer.technical.test.services;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
 import offer.technical.test.mapper.UserMapper;
 import offer.technical.test.model.UserEntity;
 import offer.technical.test.model.UserResource;
@@ -34,15 +31,15 @@ class UserServiceTest {
   private UserMapper userMapper;
 
   @Test
-  void getAll() {
-    final List<UserEntity> userEntities = Collections.singletonList(getUserEntity());
-    final List<UserResource> userResources = Collections.singletonList(getUserResource());
-    when(userRepository.findAll()).thenReturn(userEntities);
-    when(userMapper.listUserEntityToListUserResource(anyList())).thenReturn(userResources);
+  void getUser() {
+    final UserEntity userEntity = getUserEntity();
+    final UserResource userResource = getUserResource();
+    when(userRepository.findOneByName(userEntity.getName())).thenReturn(userEntity);
+    when(userMapper.userEntityUserResource(userEntity)).thenReturn(userResource);
 
-    assertThat(userResources).isEqualTo(userService.getAll());
-    verify(userRepository, only()).findAll();
-    verify(userRepository, times(1)).findAll();
+    assertThat(userResource).isEqualTo(userService.getUser(userResource.getName()));
+    verify(userRepository, only()).findOneByName(userEntity.getName());
+    verify(userRepository, times(1)).findOneByName(userEntity.getName());
   }
 
   @Test

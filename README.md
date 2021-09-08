@@ -18,4 +18,4 @@ Then, launch Application.
 You can find a postman collection in this project : offer-technical-test.postman_collection.json
 
 1. To create a user (A user must be a french adult!)
-2. To get all users
+2. To get details of one register user

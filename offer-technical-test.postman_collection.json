@@ -34,12 +34,12 @@
 			"response": []
 		},
 		{
-			"name": "get all users",
+			"name": "get one register user",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users",
+					"raw": "http://localhost:8080/users?name=test",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -47,6 +47,12 @@
 					"port": "8080",
 					"path": [
 						"users"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "test"
+						}
 					]
 				}
 			},

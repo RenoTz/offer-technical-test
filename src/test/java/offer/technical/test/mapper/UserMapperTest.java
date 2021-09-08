@@ -17,17 +17,6 @@ class UserMapperTest {
   private UserMapper userMapper;
 
   @Test
-  void listUserEntityToListUserResource() {
-
-    final List<UserResource> userResources = Collections.singletonList(getUserResource());
-    final List<UserEntity> userEntities = Collections.singletonList(getUserEntity());
-
-    Assertions.assertThat(userMapper.listUserEntityToListUserResource(userEntities))
-        .isNotEmpty()
-        .isEqualTo(userResources);
-  }
-
-  @Test
   void userEntityUserResource() {
 
     final UserResource userResource = getUserResource();

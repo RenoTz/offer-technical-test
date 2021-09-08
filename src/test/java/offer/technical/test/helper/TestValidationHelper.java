@@ -13,22 +13,15 @@ import org.springframework.util.CollectionUtils;
 @Component
 public class TestValidationHelper {
 
-
   public static final String NOT_NULL_MESSAGE = "must not be null";
   public static final String NOT_BLANK_MESSAGE = "must not be blank";
-  public static final String NOT_EMPTY_MESSAGE = "must not be empty";
-  public static final String MUST_ADHERE_TO_ISO_4217_FORMAT = "must adhere to ISO4217 format";
-  public static final String MUST_ADHERE_TO_ISO_8601_DATE_TIME_FORMAT = "must adhere to ISO8601.dateTime format";
-  public static final String INVALID_VALUE = "invalidValue";
 
   @Autowired
   private Validator validator;
 
-
   public Validator getValidator() {
     return validator;
   }
-
 
   public <T> void containsExactlyExpectedViolations(
       final Set<? extends ConstraintViolation<? extends T>> result,
@@ -49,9 +42,9 @@ public class TestValidationHelper {
   }
 
   private <T> boolean match(final ConstraintViolation<T> violation,
-      final ExpectedTestViolation expectedV) {
-    return StringUtils.equals(expectedV.getStringPath(), violation.getPropertyPath().toString())
-        && StringUtils.equals(expectedV.getMessage(), violation.getMessage());
+      final ExpectedTestViolation expectedViolation) {
+    return StringUtils.equals(expectedViolation.getStringPath(), violation.getPropertyPath().toString())
+        && StringUtils.equals(expectedViolation.getMessage(), violation.getMessage());
   }
 
 }

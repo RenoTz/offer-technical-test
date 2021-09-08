@@ -7,8 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
 import offer.technical.test.model.UserEntity;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 @ExtendWith(MockitoExtension.class)
 class UserRepositoryTest {
@@ -28,13 +28,15 @@ class UserRepositoryTest {
   private MongoTemplate mongoTemplate;
 
   @Test
-  void findAll() {
-    final List<UserEntity> users = Collections.singletonList(getUser());
-    when(mongoTemplate.findAll(UserEntity.class)).thenReturn(users);
+  void findOneByName() {
+    final UserEntity user = getUser();
+    final Query query = new Query();
+    query.addCriteria(Criteria.where("name").is(user.getName()));
+    when(mongoTemplate.findOne(query, UserEntity.class)).thenReturn(user);
 
-    assertThat(users).isEqualTo(userRepository.findAll());
-    verify(mongoTemplate, only()).findAll(UserEntity.class);
-    verify(mongoTemplate, times(1)).findAll(UserEntity.class);
+    assertThat(user).isEqualTo(userRepository.findOneByName(user.getName()));
+    verify(mongoTemplate, only()).findOne(query, UserEntity.class);
+    verify(mongoTemplate, times(1)).findOne(query, UserEntity.class);
   }
 
   @Test
