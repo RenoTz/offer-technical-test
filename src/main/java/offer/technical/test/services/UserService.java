@@ -1,5 +1,6 @@
 package offer.technical.test.services;
 
+import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.mapper.UserMapper;
 import offer.technical.test.model.UserResource;
 import offer.technical.test.repositories.UserRepository;
@@ -34,7 +35,7 @@ public class UserService {
    * @param user
    * @return user registered
    */
-  public UserResource create(final UserResource user) {
+  public UserResource create(final UserResource user) throws AlreadyExistsException {
     return mapper.userEntityUserResource(repository.create(mapper.userResourceToUserEntity(user)));
   }
 

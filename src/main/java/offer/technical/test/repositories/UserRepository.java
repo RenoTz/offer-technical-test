@@ -1,8 +1,8 @@
 package offer.technical.test.repositories;
 
 import java.util.Objects;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -46,10 +46,17 @@ public class UserRepository {
    * @param userEntity
    * @return userEntity registered
    */
-  public UserEntity create(final UserEntity user) {
+  public UserEntity create(final UserEntity user) throws AlreadyExistsException {
+    UserEntity newUser = null;
     log.info("Attempting to create user");
-    final UserEntity newUser = mongoTemplate.insert(user);
-    log.info("User created : {} - {} - {}", user.getName(), user.getBirthDate(), user.getCountry());
+    if (Objects.isNull(findOneByName(user.getName()))) {
+      newUser = mongoTemplate.insert(user);
+      log.info("User created : {} - {} - {}", user.getName(), user.getBirthDate(),
+          user.getCountry());
+    } else {
+      log.error("User already exists in database with username : {}", user.getName());
+      throw new AlreadyExistsException("User already exists in database");
+    }
     return newUser;
   }
 

@@ -1,6 +1,7 @@
 package offer.technical.test.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
@@ -8,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.model.UserEntity;
 import offer.technical.test.model.UserResource;
 import offer.technical.test.repositories.UserRepository;
@@ -21,12 +23,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
   private static final String TARGET_URI = "/users";
+  private static final String TARGET_URI_GET = TARGET_URI + "/{name}";
 
   @Autowired
   private UserController userController;
@@ -44,12 +46,10 @@ class UserControllerTest {
     final UserEntity userEntity = getMinimalUserEntity();
     when(userRepository.findOneByName("test")).thenReturn(userEntity);
 
-    final String uriWithQueryParam = UriComponentsBuilder.fromUriString(TARGET_URI)
-        .queryParam("name", user.getName())
-        .toUriString();
-
     webClient.get()
-        .uri(uriWithQueryParam)
+        .uri(uriBuilder -> uriBuilder
+            .path(TARGET_URI_GET)
+            .build("test"))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .exchange()
         .expectStatus()
@@ -66,13 +66,12 @@ class UserControllerTest {
 
     when(userRepository.findOneByName("test")).thenReturn(null);
 
-    final String uriWithQueryParam = UriComponentsBuilder.fromUriString(TARGET_URI)
-        .queryParam("name", "test")
-        .toUriString();
-
     webClient.get()
-        .uri(uriWithQueryParam)
+        .uri(uriBuilder -> uriBuilder
+            .path(TARGET_URI_GET)
+            .build("test"))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .attribute("name", "test")
         .exchange()
         .expectStatus()
         .isNotFound();
@@ -82,10 +81,11 @@ class UserControllerTest {
   }
 
   @Test
-  void create_valid() {
+  void create_valid() throws AlreadyExistsException {
 
     final UserResource user = getMinimalUser();
     final UserEntity userEntity = getMinimalUserEntity();
+    when(userRepository.findOneByName("test")).thenReturn(null);
     when(userRepository.create(userEntity)).thenReturn(userEntity);
 
     webClient.post()
@@ -103,7 +103,7 @@ class UserControllerTest {
   }
 
   @Test
-  void create_withBirthDateInvalid_badRequest() {
+  void create_withBirthDateInvalid_badRequest() throws AlreadyExistsException {
 
     final UserResource user = getMinimalUser()
         .setBirthDate(LocalDate.of(2015, 1, 1));
@@ -120,7 +120,7 @@ class UserControllerTest {
   }
 
   @Test
-  void create_withPhoneNumberInvalid_badRequest() {
+  void create_withPhoneNumberInvalid_badRequest() throws AlreadyExistsException {
 
     final UserResource user = getMinimalUser()
         .setPhoneNumber("+123 54 87 644");
@@ -137,7 +137,7 @@ class UserControllerTest {
   }
 
   @Test
-  void create_withGenderInvalid_badRequest() {
+  void create_withGenderInvalid_badRequest() throws AlreadyExistsException {
 
     final UserResource user = getMinimalUser()
         .setGender("invalid");
@@ -154,7 +154,7 @@ class UserControllerTest {
   }
 
   @Test
-  void create_withCountryInvalid_badRequest() {
+  void create_withCountryInvalid_badRequest() throws AlreadyExistsException {
 
     final UserResource user = getMinimalUser()
         .setCountry("invalid");
@@ -168,6 +168,22 @@ class UserControllerTest {
         .isBadRequest();
 
     verify(userRepository, never()).create(any(UserEntity.class));
+  }
+
+  @Test
+  void create_alreadyExistsException_badRequest() throws AlreadyExistsException {
+
+    final UserResource user = getMinimalUser();
+    final UserEntity userEntity = getMinimalUserEntity();
+    doThrow(AlreadyExistsException.class).when(userRepository).create(userEntity);
+
+    webClient.post()
+        .uri(TARGET_URI)
+        .body(BodyInserters.fromValue(user))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .exchange()
+        .expectStatus()
+        .isBadRequest();
   }
 
   private UserResource getMinimalUser() {

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.mapper.UserMapper;
 import offer.technical.test.model.UserEntity;
 import offer.technical.test.model.UserResource;
@@ -43,7 +44,7 @@ class UserServiceTest {
   }
 
   @Test
-  void create() {
+  void create() throws AlreadyExistsException {
     final UserEntity userEntity = getUserEntity();
     final UserResource userResource = getUserResource();
     when(userRepository.create(userEntity)).thenReturn(userEntity);

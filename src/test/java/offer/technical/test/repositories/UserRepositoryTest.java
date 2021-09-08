@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.model.UserEntity;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,13 +41,31 @@ class UserRepositoryTest {
   }
 
   @Test
-  void create() {
+  void create_ok() throws AlreadyExistsException {
     final UserEntity user = getUser();
+    final Query query = new Query();
+    query.addCriteria(Criteria.where("name").is(user.getName()));
+    when(mongoTemplate.findOne(query, UserEntity.class)).thenReturn(null);
     when(mongoTemplate.insert(user)).thenReturn(user);
 
     Assertions.assertThat(user).isEqualTo(userRepository.create(user));
-    verify(mongoTemplate, only()).insert(user);
+    verify(mongoTemplate, times(1)).findOne(query, UserEntity.class);
     verify(mongoTemplate, times(1)).insert(user);
+  }
+
+  @Test
+  void create_alreadyExistsException() {
+    final UserEntity user = getUser();
+    final Query query = new Query();
+    query.addCriteria(Criteria.where("name").is(user.getName()));
+    when(mongoTemplate.findOne(query, UserEntity.class)).thenReturn(user);
+
+    Assertions.assertThatExceptionOfType(AlreadyExistsException.class)
+        .isThrownBy(() -> userRepository.create(user))
+        .withMessage("User already exists in database");
+
+    verify(mongoTemplate, times(1)).findOne(query, UserEntity.class);
+    verify(mongoTemplate, times(0)).insert(user);
   }
 
   private UserEntity getUser() {
