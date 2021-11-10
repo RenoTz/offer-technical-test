@@ -1,42 +1,38 @@
 package offer.technical.test.services;
 
+import lombok.RequiredArgsConstructor;
 import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.mapper.UserMapper;
 import offer.technical.test.model.UserResource;
 import offer.technical.test.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
   private final UserRepository repository;
   private final UserMapper mapper;
 
-  @Autowired
-  UserService(final UserRepository repository, final UserMapper mapper) {
-    this.repository = repository;
-    this.mapper = mapper;
-  }
-
   /**
    * Retrieve a user by username
    *
-   * @param name
-   * @return user
+   * @param name username
+   * @return a {@link UserResource} founded
    */
-  public UserResource getUser(final String name) {
-    return mapper.userEntityUserResource(repository.findOneByName(name));
+  public UserResource getUser(String name) {
+    return mapper.userEntityToUserResource(repository.findOneByName(name));
   }
 
   /**
    * Register a user
    *
-   * @param user
-   * @return user registered
+   * @param user a {@link UserResource} instance
+   * @return a {@link UserResource} registered instance
+   * @throws AlreadyExistsException if user already exists in database
    */
-  public UserResource create(final UserResource user) throws AlreadyExistsException {
-    return mapper.userEntityUserResource(repository.create(mapper.userResourceToUserEntity(user)));
+  public UserResource create(UserResource user) throws AlreadyExistsException {
+    return mapper.userEntityToUserResource(repository.create(mapper.userResourceToUserEntity(user)));
   }
 
 }

@@ -1,36 +1,34 @@
 package offer.technical.test.repositories;
 
-import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import offer.technical.test.errors.AlreadyExistsException;
 import offer.technical.test.model.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
+
 @Slf4j
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
 
   private final MongoTemplate mongoTemplate;
 
-  UserRepository(@Autowired MongoTemplate mongoTemplate) {
-    this.mongoTemplate = mongoTemplate;
-  }
-
   /**
    * Retrieve a user by username
    *
-   * @param name
-   * @return userEntity
+   * @param name username
+   * @return {@link UserEntity} instance
    */
-  public UserEntity findOneByName(final String name) {
-    final Query query = new Query();
+  public UserEntity findOneByName(String name) {
+    Query query = new Query();
     query.addCriteria(Criteria.where("name").is(name));
     log.info("Attempting to find user with username : {}", name);
-    final UserEntity userEntity = mongoTemplate.findOne(query, UserEntity.class);
+    UserEntity userEntity = mongoTemplate.findOne(query, UserEntity.class);
     if (Objects.nonNull(userEntity)) {
       log.info("User found : {} - {} - {}", userEntity.getName(), userEntity.getBirthDate(),
           userEntity.getCountry());
@@ -43,11 +41,12 @@ public class UserRepository {
   /**
    * Register a user
    *
-   * @param userEntity
-   * @return userEntity registered
+   * @param user a {@link UserEntity} instance
+   * @return {@link UserEntity} registered instance
+   * @throws AlreadyExistsException if user already exists in database
    */
-  public UserEntity create(final UserEntity user) throws AlreadyExistsException {
-    UserEntity newUser = null;
+  public UserEntity create(UserEntity user) throws AlreadyExistsException {
+    UserEntity newUser;
     log.info("Attempting to create user");
     if (Objects.isNull(findOneByName(user.getName()))) {
       newUser = mongoTemplate.insert(user);

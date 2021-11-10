@@ -10,10 +10,11 @@ import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.mongo.distribution.Version.Main;
 import de.flapdoodle.embed.process.config.RuntimeConfig;
 import de.flapdoodle.embed.process.config.io.ProcessOutput;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EmbeddedMongoDB {
@@ -81,23 +82,23 @@ public class EmbeddedMongoDB {
      * @return EmbeddedMongoDB instance 
      */
     public EmbeddedMongoDB start() {
-        if (!this.active && !inUse(this.host, this.port)) {
+        if (!active && !inUse(host, port)) {
             try {
                 Command command = Command.MongoD;
                 RuntimeConfig runtimeConfig = Defaults.runtimeConfigFor(command)
                         .processOutput(ProcessOutput.getDefaultInstanceSilent())
                         .build();
                 
-                this.mongodProcess = MongodStarter.getInstance(runtimeConfig).prepare(MongodConfig.builder()
-                        .version(this.version)
-                        .net(new Net(this.host, this.port, false))
+                mongodProcess = MongodStarter.getInstance(runtimeConfig).prepare(MongodConfig.builder()
+                        .version(version)
+                        .net(new Net(host, port, false))
                         .build())
                         .start();
 
-                this.active = true;
-                log.info("Successfully started EmbeddedMongoDB @ {}:{}", this.host, this.port);
-            } catch (final IOException e) {
-                log.error("Failed to start EmbeddedMongoDB @ {}:{}", this.host, this.port, e);
+                active = true;
+                log.info("Successfully started EmbeddedMongoDB @ {}:{}", host, port);
+            } catch (IOException e) {
+                log.error("Failed to start EmbeddedMongoDB @ {}:{}", host, port, e);
             }
         }
         
@@ -129,11 +130,11 @@ public class EmbeddedMongoDB {
      * Stops the EmbeddedMongoDB instance
      */
     public void stop() {
-        if (this.active) {
-            this.mongodProcess.stop();
-            this.active = false;
+        if (active) {
+            mongodProcess.stop();
+            active = false;
 
-            log.info("Successfully stopped EmbeddedMongoDB @ {}:{}", this.host, this.port);
+            log.info("Successfully stopped EmbeddedMongoDB @ {}:{}", host, port);
         }
     }
 

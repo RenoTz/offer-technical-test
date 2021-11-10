@@ -12,12 +12,12 @@ public class PhoneNumberValidator implements
   private Pattern pattern;
 
   @Override
-  public void initialize(final PhoneNumberConstraint constraint) {
+  public void initialize(PhoneNumberConstraint constraint) {
     pattern = Pattern.compile(REGEX_PHONE_NUMBER);
   }
 
   @Override
-  public boolean isValid(final String value, final ConstraintValidatorContext context) {
+  public boolean isValid(String value, ConstraintValidatorContext context) {
     return Objects.isNull(value) || pattern.matcher(value).matches();
   }
 

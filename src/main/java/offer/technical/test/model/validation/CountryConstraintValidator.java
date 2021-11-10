@@ -15,8 +15,8 @@ public class CountryConstraintValidator implements
   @Override
   public boolean isValid(final String value, final ConstraintValidatorContext context) {
     return Objects.isNull(value)
-        || (value.equalsIgnoreCase("france")
-        || (value.equalsIgnoreCase("french")));
+        || ("france".equalsIgnoreCase(value)
+        || ("french".equalsIgnoreCase(value)));
   }
 
 }

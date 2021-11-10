@@ -9,13 +9,13 @@ public class AdultConstraintValidator implements
     ConstraintValidator<AdultConstraint, LocalDate> {
 
   @Override
-  public void initialize(final AdultConstraint constraint) {
+  public void initialize(AdultConstraint constraint) {
     // No particular behaviour
   }
 
   @Override
-  public boolean isValid(final LocalDate date, final ConstraintValidatorContext context) {
-    final LocalDate today = LocalDate.now();
+  public boolean isValid(LocalDate date, ConstraintValidatorContext context) {
+    LocalDate today = LocalDate.now();
     return Objects.isNull(date) || (today.minusYears(18).compareTo(date) >= 0);
   }
 

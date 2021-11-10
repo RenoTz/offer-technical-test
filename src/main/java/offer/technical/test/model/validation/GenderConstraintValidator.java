@@ -8,14 +8,14 @@ public class GenderConstraintValidator implements
     ConstraintValidator<GenderConstraint, String> {
 
   @Override
-  public void initialize(final GenderConstraint constraint) {
+  public void initialize(GenderConstraint constraint) {
     // No particular behaviour
   }
 
   @Override
-  public boolean isValid(final String value, final ConstraintValidatorContext context) {
+  public boolean isValid(String value, ConstraintValidatorContext context) {
     return Objects.isNull(value)
-        || (value.equalsIgnoreCase("m") || value.equalsIgnoreCase("f"));
+        || ("m".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value));
   }
 
 }
