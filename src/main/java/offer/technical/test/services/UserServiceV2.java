@@ -25,4 +25,10 @@ public class UserServiceV2 {
         return userMapper.userEntityToUserResourceV2(userRepository.create(entity));
     }
 
+    public UserResourceV2 getUser(String name) {
+        return userMapper.userEntityToUserResourceV2(userRepository.getUserByName(name));
+    }
+
+
+
 }

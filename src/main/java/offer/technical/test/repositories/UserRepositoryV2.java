@@ -3,6 +3,8 @@ package offer.technical.test.repositories;
 import lombok.RequiredArgsConstructor;
 import offer.technical.test.model.UserEntityV2;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,4 +17,12 @@ public class UserRepositoryV2 {
     return mongoTemplate.save(user);
   }
 
+  public UserEntityV2 getUserByName(String name) {
+    Query query = new Query();
+
+    query.addCriteria(Criteria.where("name").is(name));
+    UserEntityV2 user = mongoTemplate.findOne(query, UserEntityV2.class);
+
+    return user;
+  }
 }

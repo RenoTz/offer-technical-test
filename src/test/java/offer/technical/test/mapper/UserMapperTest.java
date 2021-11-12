@@ -1,6 +1,8 @@
 package offer.technical.test.mapper;
 
 import java.time.LocalDate;
+
+import lombok.RequiredArgsConstructor;
 import offer.technical.test.model.UserEntity;
 import offer.technical.test.model.UserResource;
 import org.assertj.core.api.Assertions;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@RequiredArgsConstructor
 class UserMapperTest {
 
   @Autowired
@@ -20,7 +23,7 @@ class UserMapperTest {
     final UserResource userResource = getUserResource();
     final UserEntity userEntity = getUserEntity();
 
-    Assertions.assertThat(userMapper.userEntityUserResource(userEntity))
+    Assertions.assertThat(userMapper.userEntityToUserResource(userEntity))
         .isNotNull()
         .isEqualTo(userResource);
   }
