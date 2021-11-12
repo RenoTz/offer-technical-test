@@ -36,7 +36,7 @@ class UserServiceTest {
     final UserEntity userEntity = getUserEntity();
     final UserResource userResource = getUserResource();
     when(userRepository.findOneByName(userEntity.getName())).thenReturn(userEntity);
-    when(userMapper.userEntityUserResource(userEntity)).thenReturn(userResource);
+    when(userMapper.userEntityToUserResource(userEntity)).thenReturn(userResource);
 
     assertThat(userResource).isEqualTo(userService.getUser(userResource.getName()));
     verify(userRepository, only()).findOneByName(userEntity.getName());
@@ -48,7 +48,7 @@ class UserServiceTest {
     final UserEntity userEntity = getUserEntity();
     final UserResource userResource = getUserResource();
     when(userRepository.create(userEntity)).thenReturn(userEntity);
-    when(userMapper.userEntityUserResource(userEntity)).thenReturn(userResource);
+    when(userMapper.userEntityToUserResource(userEntity)).thenReturn(userResource);
     when(userMapper.userResourceToUserEntity(userResource)).thenReturn(userEntity);
 
     Assertions.assertThat(userResource).isEqualTo(userService.create(userResource));

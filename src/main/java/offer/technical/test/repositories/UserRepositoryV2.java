@@ -19,10 +19,7 @@ public class UserRepositoryV2 {
 
   public UserEntityV2 getUserByName(String name) {
     Query query = new Query();
-
     query.addCriteria(Criteria.where("name").is(name));
-    UserEntityV2 user = mongoTemplate.findOne(query, UserEntityV2.class);
-
-    return user;
+    return mongoTemplate.findOne(query, UserEntityV2.class);
   }
 }
