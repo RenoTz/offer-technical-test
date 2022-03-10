@@ -11,14 +11,14 @@ import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.FIELD)
 @MustBeDocumented
-@Constraint(validatedBy = [AdultConstraintValidatorKt::class])
-annotation class AdultConstraintKt(
+@Constraint(validatedBy = [AdultConstraintValidator::class])
+annotation class AdultConstraint(
     val message: String = "must be an adult",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
 
-class AdultConstraintValidatorKt : ConstraintValidator<AdultConstraintKt, LocalDate> {
+class AdultConstraintValidator : ConstraintValidator<AdultConstraint, LocalDate> {
     override fun isValid(value: LocalDate?, context: ConstraintValidatorContext?): Boolean {
         val today = LocalDate.now()
         return Objects.isNull(value) || today.minusYears(18) >= value
@@ -27,14 +27,14 @@ class AdultConstraintValidatorKt : ConstraintValidator<AdultConstraintKt, LocalD
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.FIELD)
 @MustBeDocumented
-@Constraint(validatedBy = [CountryConstraintValidatorKt::class])
-annotation class CountryConstraintKt(
+@Constraint(validatedBy = [CountryConstraintValidator::class])
+annotation class CountryConstraint(
     val message: String = "must be a french resident",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
 
-class CountryConstraintValidatorKt : ConstraintValidator<CountryConstraintKt, String> {
+class CountryConstraintValidator : ConstraintValidator<CountryConstraint, String> {
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
         return Objects.isNull(value)
                 || (value.equals("france", ignoreCase = true)
@@ -44,14 +44,14 @@ class CountryConstraintValidatorKt : ConstraintValidator<CountryConstraintKt, St
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.FIELD)
 @MustBeDocumented
-@Constraint(validatedBy = [GenderConstraintValidatorKt::class])
-annotation class GenderConstraintKt(
+@Constraint(validatedBy = [GenderConstraintValidator::class])
+annotation class GenderConstraint(
     val message: String = "must be a male or female",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
 
-class GenderConstraintValidatorKt : ConstraintValidator<GenderConstraintKt, String> {
+class GenderConstraintValidator : ConstraintValidator<GenderConstraint, String> {
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
         return Objects.isNull(value)
                 || value.equals("m", ignoreCase = true) || value.equals("f", ignoreCase = true)
@@ -60,18 +60,18 @@ class GenderConstraintValidatorKt : ConstraintValidator<GenderConstraintKt, Stri
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.FIELD)
 @MustBeDocumented
-@Constraint(validatedBy = [PhoneConstraintValidatorKt::class])
-annotation class PhoneConstraintKt(
+@Constraint(validatedBy = [PhoneConstraintValidator::class])
+annotation class PhoneConstraint(
     val message: String = "must have a valid phone number",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
 
-class PhoneConstraintValidatorKt : ConstraintValidator<PhoneConstraintKt, String> {
+class PhoneConstraintValidator : ConstraintValidator<PhoneConstraint, String> {
     private var REGEX_PHONE_NUMBER = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2})$"
     private var pattern: Pattern? = null
 
-    override fun initialize(constraint: PhoneConstraintKt?) {
+    override fun initialize(constraint: PhoneConstraint?) {
         pattern = Pattern.compile(REGEX_PHONE_NUMBER)
     }
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {

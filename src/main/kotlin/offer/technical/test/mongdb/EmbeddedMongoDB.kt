@@ -14,7 +14,7 @@ import java.io.IOException
 import java.net.Socket
 import java.util.*
 
-class EmbeddedMongoKt {
+class EmbeddedMongoDB {
 
     private val log = KotlinLogging.logger {}
 
@@ -29,8 +29,8 @@ class EmbeddedMongoKt {
      *
      * @return EmbeddedMongoKt instance
      */
-    fun create(): EmbeddedMongoKt? {
-        return EmbeddedMongoKt()
+    fun create(): EmbeddedMongoDB? {
+        return EmbeddedMongoDB()
     }
 
     /**
@@ -41,7 +41,7 @@ class EmbeddedMongoKt {
      * @param port The port to set
      * @return EmbeddedMongoKt instance
      */
-    fun withPort(port: Int): EmbeddedMongoKt {
+    fun withPort(port: Int): EmbeddedMongoDB {
         this.port = port
         return this
     }
@@ -54,7 +54,7 @@ class EmbeddedMongoKt {
      * @param host The host to set
      * @return EmbeddedMongoKt instance
      */
-    fun withHost(host: String): EmbeddedMongoKt {
+    fun withHost(host: String): EmbeddedMongoDB {
         Objects.requireNonNull(host, "host can not be null")
         this.host = host
         return this
@@ -68,7 +68,7 @@ class EmbeddedMongoKt {
      * @param version The version to set
      * @return EmbeddedMongoKt instance
      */
-    fun withVersion(version: Version.Main): EmbeddedMongoKt? {
+    fun withVersion(version: Version.Main): EmbeddedMongoDB? {
         Objects.requireNonNull(version, "version can not be null")
         this.version = version
         return this
@@ -78,7 +78,7 @@ class EmbeddedMongoKt {
      * Starts the EmbeddedMongoKt instance
      * @return EmbeddedMongoKt instance
      */
-    fun start(): EmbeddedMongoKt? {
+    fun start(): EmbeddedMongoDB? {
         if (!active && !inUse(host, port)) {
             try {
                 val command = Command.MongoD

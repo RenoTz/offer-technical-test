@@ -1,9 +1,7 @@
 package offer.technical.test.controller
 
-import offer.technical.test.errors.AlreadyExistsExceptionKt
-import offer.technical.test.errors.ApiErrorKt
-import offer.technical.test.model.UserResourceKt
-import offer.technical.test.services.UserServiceKt
+import offer.technical.test.model.UserResource
+import offer.technical.test.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -17,7 +15,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/users")
-class UserControllerKt(var userService: UserServiceKt) {
+class UserController(var userService: UserService) {
 
     /**
      * Retrieve user by username
@@ -26,9 +24,9 @@ class UserControllerKt(var userService: UserServiceKt) {
      * @return user
      */
     @GetMapping("/{name}")
-    fun getUser(@PathVariable("name") name: String?): ResponseEntity<UserResourceKt>? {
+    fun getUser(@PathVariable("name") name: String?): ResponseEntity<UserResource>? {
         return Optional.ofNullable(userService.getUser(name))
-            .map<ResponseEntity<UserResourceKt>> { body: UserResourceKt? -> ResponseEntity.ok(body) }
+            .map<ResponseEntity<UserResource>> { body: UserResource? -> ResponseEntity.ok(body) }
             .orElse(ResponseEntity.notFound().build())
     }
 
@@ -39,11 +37,7 @@ class UserControllerKt(var userService: UserServiceKt) {
      * @return user registered
      */
     @PostMapping
-    fun create(@RequestBody @Validated user: UserResourceKt?): ResponseEntity<Any?>? {
-        return try {
-            ResponseEntity(userService.create(user), HttpStatus.CREATED)
-        } catch (e: AlreadyExistsExceptionKt) {
-            ResponseEntity.badRequest().body(e.message?.let { ApiErrorKt(HttpStatus.BAD_REQUEST, it) })
-        }
+    fun create(@RequestBody @Validated user: UserResource?): ResponseEntity<Any?> {
+        return ResponseEntity(userService.create(user), HttpStatus.CREATED)
     }
 }

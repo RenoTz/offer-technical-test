@@ -1,13 +1,13 @@
 package offer.technical.test.services
 
-import offer.technical.test.errors.AlreadyExistsExceptionKt
-import offer.technical.test.mapper.UserMapperKt
-import offer.technical.test.model.UserResourceKt
-import offer.technical.test.repositories.UserRepositoryKt
+import offer.technical.test.errors.AlreadyExistsException
+import offer.technical.test.mapper.UserMapper
+import offer.technical.test.model.UserResource
+import offer.technical.test.repositories.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
-class UserServiceKt(var repository: UserRepositoryKt, var mapper: UserMapperKt) {
+class UserService(var repository: UserRepository, var mapper: UserMapper) {
 
     /**
      * Retrieve a user by username
@@ -15,7 +15,7 @@ class UserServiceKt(var repository: UserRepositoryKt, var mapper: UserMapperKt) 
      * @param name
      * @return user
      */
-    fun getUser(name: String?): UserResourceKt? {
+    fun getUser(name: String?): UserResource? {
         return mapper.userEntityUserResource(repository.findOneByName(name))
     }
 
@@ -25,8 +25,8 @@ class UserServiceKt(var repository: UserRepositoryKt, var mapper: UserMapperKt) 
      * @param user
      * @return user registered
      */
-    @kotlin.Throws(AlreadyExistsExceptionKt::class)
-    fun create(user: UserResourceKt?): UserResourceKt? {
+    @kotlin.Throws(AlreadyExistsException::class)
+    fun create(user: UserResource?): UserResource? {
         return mapper.userEntityUserResource(mapper.userResourceToUserEntity(user)?.let { repository.create(it) })
     }
 

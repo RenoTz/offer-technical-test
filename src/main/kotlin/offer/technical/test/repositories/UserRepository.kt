@@ -1,8 +1,8 @@
 package offer.technical.test.repositories
 
 import mu.KotlinLogging
-import offer.technical.test.errors.AlreadyExistsExceptionKt
-import offer.technical.test.model.UserEntityKt
+import offer.technical.test.errors.AlreadyExistsException
+import offer.technical.test.model.UserEntity
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-open class UserRepositoryKt(private var mongoTemplate: MongoTemplate) {
+open class UserRepository(private var mongoTemplate: MongoTemplate) {
 
     private val log = KotlinLogging.logger {}
 
@@ -20,11 +20,11 @@ open class UserRepositoryKt(private var mongoTemplate: MongoTemplate) {
      * @param name
      * @return UserEntityKt
      */
-    open fun findOneByName(name: String?): UserEntityKt? {
+    open fun findOneByName(name: String?): UserEntity? {
         val query = Query()
         query.addCriteria(Criteria.where("name").`is`(name))
         log.info("Attempting to find user with username : {}", name)
-        val userEntity: UserEntityKt? = mongoTemplate.findOne(query, UserEntityKt::class.java)
+        val userEntity: UserEntity? = mongoTemplate.findOne(query, UserEntity::class.java)
         if (Objects.nonNull(userEntity)) {
             log.info("User found : {} - {} - {}", userEntity?.name, userEntity?.birthDate, userEntity?.country)
         } else {
@@ -39,16 +39,16 @@ open class UserRepositoryKt(private var mongoTemplate: MongoTemplate) {
      * @param user
      * @return userEntity registered
      */
-    @Throws(AlreadyExistsExceptionKt::class)
-    open fun create(user: UserEntityKt): UserEntityKt? {
-        val newUser: UserEntityKt?
+    @Throws(AlreadyExistsException::class)
+    open fun create(user: UserEntity): UserEntity? {
+        val newUser: UserEntity?
         log.info("Attempting to create user")
         if (Objects.isNull(findOneByName(user.name))) {
             newUser = mongoTemplate.insert(user)
             log.info("User created : {} - {} - {}", user.name, user.birthDate, user.country)
         } else {
             log.error("User already exists in database with username : {}", user.name)
-            throw AlreadyExistsExceptionKt("User already exists in database")
+            throw AlreadyExistsException("User already exists in database")
         }
         return newUser
     }
